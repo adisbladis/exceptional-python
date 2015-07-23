@@ -1,4 +1,6 @@
-from exceptional import exceptional, NoExceptionError
+from exceptional import *
+
+int = exceptionalize(int)
 
 
 class Fizzable(Exception):
@@ -15,14 +17,24 @@ class FizzBuzzable(Exception):
 
 @exceptional
 def handle(x):
-    div_3 = (x % 3 == 0)
-    div_5 = (x % 5 == 0)
-    if div_3 and div_5:
-        raise FizzBuzzable()
-    if div_3:
-        raise Fizzable()
-    if div_5:
+    try:
+        (int(x % 3) == int(0))
+    except TrueException:
+        try:
+            (int(x % 5) == int(0))
+        except TrueException:
+            raise FizzBuzzable()
+        except FalseException:
+            raise Fizzable()
+    except FalseException:
+        pass
+
+    try:
+        (int(x % 5) == int(0))
+    except TrueException:
         raise Buzzable()
+    except FalseException:
+        pass
 
 
 for x in range(1, 101):
